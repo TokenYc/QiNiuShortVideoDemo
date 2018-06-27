@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#e8b7ea"
+    android:padding="10dp"
+    tools:context=".ui.progress.ProgressBarActivity">
+
+    <net.archeryc.qiniushortvideodemo.ui.progress.SectionProgressBar
+        android:id="@+id/recordProgressBar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#22000000"
+        android:onClick="start"
+        android:text="开始动画"
+        app:layout_constraintTop_toBottomOf="@id/recordProgressBar" />
+
+
+    <Button
+        android:id="@+id/btn_pause"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:background="#22000000"
+        android:onClick="pause"
+        android:text="暂停动画"
+        app:layout_constraintLeft_toRightOf="@id/btn_start"
+        app:layout_constraintTop_toBottomOf="@id/recordProgressBar" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:background="#22000000"
+        android:text="重置动画"
+        android:onClick="reset"
+        app:layout_constraintLeft_toRightOf="@id/btn_pause"
+        app:layout_constraintTop_toBottomOf="@id/recordProgressBar" />
+
+    <Button
+        android:id="@+id/btn_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="20dp"
+        android:layout_marginTop="10dp"
+        android:background="#22000000"
+        android:onClick="delete"
+        android:text="删除一段"
+        app:layout_constraintLeft_toRightOf="@id/btn_start"
+        app:layout_constraintTop_toBottomOf="@id/btn_start" />
+
+
+</android.support.constraint.ConstraintLayout>
