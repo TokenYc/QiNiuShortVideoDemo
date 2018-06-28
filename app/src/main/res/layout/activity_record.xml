@@ -52,39 +52,67 @@
             app:layout_constraintHeight_percent="0.5"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintWidth_percent="0.5" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            app:layout_constraintBottom_toTopOf="@id/btn_delete">
+
+            <Button
+                android:id="@+id/btn_speed_slow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="慢" />
+
+            <Button
+                android:id="@+id/btn_speed_normal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="正常" />
+
+            <Button
+                android:id="@+id/btn_speed_fast"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="快" />
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/btn_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginLeft="10dp"
+            android:text="删除一段"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent" />
+
+        <Button
+            android:id="@+id/btn_concat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="30dp"
+            android:layout_marginRight="10dp"
+            android:text="合成"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
-    <Button
-        android:id="@+id/btn_delete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:layout_marginLeft="10dp"
-        android:text="删除一段"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        />
 
     <ToggleButton
         android:id="@+id/btn_record"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
+        android:background="#72c187"
         android:textOff="开始录制"
         android:textOn="停止录制"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent" />
 
-    <Button
-        android:id="@+id/btn_concat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
-        android:layout_marginRight="10dp"
-        android:text="合成"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        />
 
 </android.support.constraint.ConstraintLayout>

@@ -38,7 +38,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     private final static String TEST_PATH = Environment.getExternalStorageDirectory() +
             File.separator + "qiniu_demo" + File.separator + "test.mp4";
 
-    private final static int MAX_TIME = 10 * 1000;
+    private final static int MAX_TIME = 15 * 1000;
     private ConstraintLayout clSetting;
     private ToggleButton tbtnRecord;
     private ToggleButton tbtnFlash;
@@ -47,9 +47,13 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     private SectionProgressBar sectionProgressBar;
     private Button btnDelete;
     private Button btnConcat;
+    private Button btnSpeedSlow;
+    private Button btnSpeedNormal;
+    private Button btnSpeedFast;
 
     private GLSurfaceView glSurfaceView;
     private PLShortVideoRecorder mRecorder = new PLShortVideoRecorder();
+    private float mCurrentSpeed = 1.0f;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +68,9 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
         btnSwitchCamera = findViewById(R.id.btn_switch_camera);
         btnDelete = findViewById(R.id.btn_delete);
         btnConcat = findViewById(R.id.btn_concat);
+        btnSpeedSlow = findViewById(R.id.btn_speed_slow);
+        btnSpeedNormal = findViewById(R.id.btn_speed_normal);
+        btnSpeedFast = findViewById(R.id.btn_speed_fast);
 
         initParams();
 
@@ -120,7 +127,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
                 if (isChecked) {
                     mRecorder.beginSection();
                     clSetting.setVisibility(View.GONE);
-                    sectionProgressBar.beginSection((int) (MAX_TIME * (1 - sectionProgressBar.getProgress())));
+                    sectionProgressBar.beginSection((int) ((1 / mCurrentSpeed) * MAX_TIME * (1 - sectionProgressBar.getProgress())));
                 } else {
                     mRecorder.endSection();
                     clSetting.setVisibility(View.VISIBLE);
@@ -166,9 +173,36 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
                 concat();
             }
         });
+
+        btnSpeedSlow.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSpeed(0.5f);
+            }
+        });
+
+        btnSpeedNormal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSpeed(1.0f);
+            }
+        });
+
+        btnSpeedFast.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setSpeed(2.0f);
+            }
+        });
     }
 
-    private void concat(){
+    private void setSpeed(float speed) {
+        Toast.makeText(this, "设置速度--->"+speed, Toast.LENGTH_SHORT).show();
+        mRecorder.setRecordSpeed(speed);
+        mCurrentSpeed = speed;
+    }
+
+    private void concat() {
         mRecorder.concatSections(new PLVideoSaveListener() {
             @Override
             public void onSaveVideoSuccess(String s) {
@@ -206,7 +240,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
         });
     }
 
-    private void reset(){
+    private void reset() {
         sectionProgressBar.reset();
         tbtnRecord.setChecked(false);
     }
@@ -214,6 +248,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     @Override
     public void onReady() {
         Log.d(Tag, "-----onReady-----");
+        tbtnRecord.setVisibility(View.VISIBLE);
     }
 
     @Override

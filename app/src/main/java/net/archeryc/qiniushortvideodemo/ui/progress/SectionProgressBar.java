@@ -41,8 +41,6 @@ public class SectionProgressBar extends View implements Animator.AnimatorListene
     private Paint mSectionPaint;
     private int mSectionWidth;
 
-    private boolean mShowSection = false;
-
     private float progress = 0.0f;
 
     private List<SectionInfo> sectionList = new ArrayList<>();
@@ -77,7 +75,6 @@ public class SectionProgressBar extends View implements Animator.AnimatorListene
         mProgressCorner[5] = 0f;
         mProgressCorner[6] = mBgCorner;
         mProgressCorner[7] = mBgCorner;
-
     }
 
     private void init() {
@@ -203,7 +200,6 @@ public class SectionProgressBar extends View implements Animator.AnimatorListene
      */
     public void reset() {
         progress = 0.0f;
-        mShowSection = false;
         sectionList.clear();
         invalidate();
     }
@@ -216,8 +212,14 @@ public class SectionProgressBar extends View implements Animator.AnimatorListene
 
     @Override
     public void onAnimationEnd(Animator animation) {
-        if (progress == 1.0f && mProgressListener != null) {
-            mProgressListener.onProgressEnd();
+        if (progress == 1.0f) {
+            if (!sectionList.isEmpty()) {
+                sectionList.get(sectionList.size() - 1).setEndProgress(progress);
+                invalidate();
+            }
+            if (mProgressListener != null) {
+                mProgressListener.onProgressEnd();
+            }
         }
     }
 
