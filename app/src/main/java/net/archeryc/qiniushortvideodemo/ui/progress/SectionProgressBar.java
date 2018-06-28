@@ -187,18 +187,39 @@ public class SectionProgressBar extends View implements Animator.AnimatorListene
      * 删除一个片段
      */
     public void deleteLastSection() {
-        if (!sectionList.isEmpty()) {
-            SectionInfo sectionInfo = sectionList.get(sectionList.size() - 1);
-            progress = sectionInfo.getStartProgress();
-            sectionList.remove(sectionInfo);
-            invalidate();
+        if (progressAnimator != null && !progressAnimator.isRunning()) {
+            if (!sectionList.isEmpty()) {
+                SectionInfo sectionInfo = sectionList.get(sectionList.size() - 1);
+                progress = sectionInfo.getStartProgress();
+                sectionList.remove(sectionInfo);
+                if (progressAnimator != null) {
+                    progressAnimator.removeAllListeners();
+                }
+                progressAnimator = ObjectAnimator.ofFloat(this, "progress",
+                        sectionInfo.getEndProgress(), sectionInfo.getStartProgress())
+                        .setDuration((long) (1000 * (sectionInfo.getEndProgress() - sectionInfo.getStartProgress())));
+                progressAnimator.setInterpolator(new LinearInterpolator());
+                progressAnimator.start();
+            }
         }
+    }
+
+    /**
+     * 是否动画还在运行
+     *
+     * @return
+     */
+    public boolean isRunning() {
+        return progressAnimator != null && progressAnimator.isRunning();
     }
 
     /**
      * 重置
      */
     public void reset() {
+        if (progressAnimator != null) {
+            progressAnimator.cancel();
+        }
         progress = 0.0f;
         sectionList.clear();
         invalidate();

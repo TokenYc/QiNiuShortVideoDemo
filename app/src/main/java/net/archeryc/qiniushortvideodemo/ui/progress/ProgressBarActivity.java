@@ -24,7 +24,7 @@ public class ProgressBarActivity extends AppCompatActivity {
 
     public void start(View view) {
         progressBar.beginSection((int) (10 * 1000 /count * (1 - progressBar.getProgress())));
-        count++;
+//        count++;
     }
 
     public void pause(View view) {

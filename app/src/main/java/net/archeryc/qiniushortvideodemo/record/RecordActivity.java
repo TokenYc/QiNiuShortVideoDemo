@@ -125,13 +125,13 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    mRecorder.beginSection();
-                    clSetting.setVisibility(View.GONE);
-                    sectionProgressBar.beginSection((int) ((1 / mCurrentSpeed) * MAX_TIME * (1 - sectionProgressBar.getProgress())));
+                    if (!sectionProgressBar.isRunning()) {
+                        mRecorder.beginSection();
+                    }
                 } else {
-                    mRecorder.endSection();
-                    clSetting.setVisibility(View.VISIBLE);
-                    sectionProgressBar.endSection();
+                    if (sectionProgressBar.isRunning()) {
+                        mRecorder.endSection();
+                    }
                 }
             }
         });
@@ -155,8 +155,9 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
         btnDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mRecorder.deleteLastSection();
-                sectionProgressBar.deleteLastSection();
+                if (!sectionProgressBar.isRunning()) {
+                    mRecorder.deleteLastSection();
+                }
             }
         });
 
@@ -170,7 +171,6 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
         sectionProgressBar.setSectionProgressListener(new SectionProgressBar.SectionProgressListener() {
             @Override
             public void onProgressEnd() {
-                concat();
             }
         });
 
@@ -197,7 +197,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     }
 
     private void setSpeed(float speed) {
-        Toast.makeText(this, "设置速度--->"+speed, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "设置速度--->" + speed, Toast.LENGTH_SHORT).show();
         mRecorder.setRecordSpeed(speed);
         mCurrentSpeed = speed;
     }
@@ -211,7 +211,6 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
                     @Override
                     public void run() {
                         Toast.makeText(RecordActivity.this, "合成成功", Toast.LENGTH_SHORT).show();
-                        clSetting.setVisibility(View.VISIBLE);
                         VideoInfo videoInfo = VideoSizeUtils.getVideoSize(TEST_PATH);
                         tvDesc.setText(String.format("width--->%s\nheight--->%s\nrotation-->%s\nbitrate--->%s",
                                 videoInfo.getWidth(),
@@ -264,11 +263,26 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     @Override
     public void onRecordStarted() {
         Log.d(Tag, "-----onRecordStarted-----");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                clSetting.setVisibility(View.GONE);
+                sectionProgressBar.beginSection((int) ((1 / mCurrentSpeed) * MAX_TIME * (1 - sectionProgressBar.getProgress())));
+            }
+        });
     }
 
     @Override
     public void onRecordStopped() {
         Log.d(Tag, "-----onRecordStopped-----");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                tbtnRecord.setChecked(false);
+                clSetting.setVisibility(View.VISIBLE);
+                sectionProgressBar.endSection();
+            }
+        });
     }
 
     @Override
@@ -279,6 +293,12 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     @Override
     public void onSectionDecreased(long l, long l1, int i) {
         Log.d(Tag, "-----onSectionDecreased-----");
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                sectionProgressBar.deleteLastSection();
+            }
+        });
     }
 
     @Override
