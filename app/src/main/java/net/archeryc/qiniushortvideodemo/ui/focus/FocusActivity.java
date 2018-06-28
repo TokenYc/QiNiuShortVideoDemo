@@ -20,6 +20,11 @@ public class FocusActivity extends AppCompatActivity {
         FocusView focusView=new FocusView(this);
         clRoot.addView(focusView);
         focusView.setImageResource(R.mipmap.icon_focus_video);
-        focusView.attach(clRoot);
+        focusView.attach(clRoot, new FocusView.OnFocusListener() {
+            @Override
+            public void onFocus(int centerX, int centerY, int width, int height) {
+
+            }
+        });
     }
 }

@@ -21,6 +21,7 @@ public class FocusView extends AppCompatImageView implements View.OnTouchListene
 
     private GestureDetector mDetector;
     private AnimatorSet mAnimatorSet;
+    private OnFocusListener mOnFocusListener;
 
     public FocusView(Context context) {
         this(context, null);
@@ -53,13 +54,17 @@ public class FocusView extends AppCompatImageView implements View.OnTouchListene
                             2.0f, 1.0f);
                     mAnimatorSet.playTogether(scaleXAnimator, scaleYAnimator);
                     mAnimatorSet.start();
+                    if (mOnFocusListener != null) {
+                        mOnFocusListener.onFocus((int) e.getX(), (int) e.getY(), getWidth(), getHeight());
+                    }
                 }
                 return super.onSingleTapUp(e);
             }
         });
     }
 
-    public void attach(View view) {
+    public void attach(View view, OnFocusListener onFocusListener) {
+        this.mOnFocusListener = onFocusListener;
         view.setOnTouchListener(this);
     }
 
@@ -92,4 +97,9 @@ public class FocusView extends AppCompatImageView implements View.OnTouchListene
     public void onAnimationRepeat(Animator animation) {
 
     }
+
+    public interface OnFocusListener {
+        void onFocus(int centerX, int centerY, int width, int height);
+    }
+
 }

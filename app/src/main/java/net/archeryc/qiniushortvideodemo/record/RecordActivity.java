@@ -25,6 +25,7 @@ import com.qiniu.pili.droid.shortvideo.PLVideoEncodeSetting;
 import com.qiniu.pili.droid.shortvideo.PLVideoSaveListener;
 
 import net.archeryc.qiniushortvideodemo.R;
+import net.archeryc.qiniushortvideodemo.ui.focus.FocusView;
 import net.archeryc.qiniushortvideodemo.ui.progress.SectionProgressBar;
 
 import java.io.File;
@@ -39,6 +40,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
             File.separator + "qiniu_demo" + File.separator + "test.mp4";
 
     private final static int MAX_TIME = 15 * 1000;
+    private ConstraintLayout clRoot;
     private ConstraintLayout clSetting;
     private ToggleButton tbtnRecord;
     private ToggleButton tbtnFlash;
@@ -59,6 +61,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_record);
+        clRoot = findViewById(R.id.cl_root);
         clSetting = findViewById(R.id.cl_setting);
         sectionProgressBar = findViewById(R.id.progressBar);
         tvDesc = findViewById(R.id.tv_desc);
@@ -72,9 +75,25 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
         btnSpeedNormal = findViewById(R.id.btn_speed_normal);
         btnSpeedFast = findViewById(R.id.btn_speed_fast);
 
+        initView();
+
         initParams();
 
         initListener();
+    }
+
+    private void initView() {
+        FocusView focusView = new FocusView(this);
+        focusView.setImageResource(R.mipmap.icon_focus_video);
+        clRoot.addView(focusView);
+        focusView.attach(glSurfaceView, new FocusView.OnFocusListener() {
+            @Override
+            public void onFocus(int centerX, int centerY, int width, int height) {
+                if (mRecorder != null) {
+                    mRecorder.manualFocus(width, height, centerX, centerY);
+                }
+            }
+        });
     }
 
 
