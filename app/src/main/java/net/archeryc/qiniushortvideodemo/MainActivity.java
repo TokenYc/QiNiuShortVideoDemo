@@ -11,6 +11,7 @@ import com.yanzhenjie.permission.AndPermission;
 import com.yanzhenjie.permission.Permission;
 
 import net.archeryc.qiniushortvideodemo.record.RecordActivity;
+import net.archeryc.qiniushortvideodemo.ui.focus.FocusActivity;
 import net.archeryc.qiniushortvideodemo.ui.progress.ProgressBarActivity;
 
 import java.util.List;
@@ -45,6 +46,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void progressTest(View view) {
         Intent intent = new Intent(this, ProgressBarActivity.class);
+        startActivity(intent);
+    }
+
+    public void focus(View view) {
+        Intent intent = new Intent(this, FocusActivity.class);
         startActivity(intent);
     }
 }

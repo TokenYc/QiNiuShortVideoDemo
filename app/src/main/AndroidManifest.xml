@@ -31,7 +31,8 @@
             android:name="android.max_aspect"
             android:value="2.3" />
 
-        <activity android:name=".ui.progress.ProgressBarActivity"></activity>
+        <activity android:name=".ui.progress.ProgressBarActivity" />
+        <activity android:name=".ui.focus.FocusActivity"></activity>
     </application>
 
 </manifest>

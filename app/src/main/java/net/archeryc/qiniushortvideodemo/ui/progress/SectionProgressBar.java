@@ -13,7 +13,8 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.LinearInterpolator;
-import android.widget.Toast;
+
+import net.archeryc.qiniushortvideodemo.ui.DensityUtil;
 
 import java.util.ArrayList;
 import java.util.List;

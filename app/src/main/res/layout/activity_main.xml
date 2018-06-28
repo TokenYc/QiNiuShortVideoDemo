@@ -21,4 +21,11 @@
         android:text="进度条测试"
         android:onClick="progressTest"
         />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="对焦测试"
+        android:onClick="focus"
+        />
 </LinearLayout>

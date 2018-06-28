@@ -1,4 +1,4 @@
-package net.archeryc.qiniushortvideodemo.ui.progress;
+package net.archeryc.qiniushortvideodemo.ui;
 
 import android.content.Context;
 
