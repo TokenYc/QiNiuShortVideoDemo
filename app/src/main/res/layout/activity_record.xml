@@ -35,12 +35,29 @@
             android:textOn="关闭闪光灯"
             app:layout_constraintRight_toLeftOf="@id/btn_switch_camera" />
 
+        <ToggleButton
+            android:id="@+id/tl_btn_beauty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="开启美颜"
+            android:textOn="关闭美颜"
+            app:layout_constraintRight_toLeftOf="@id/btn_switch_camera"
+            app:layout_constraintTop_toBottomOf="@id/tbtn_flash" />
+
         <Button
             android:id="@+id/btn_switch_camera"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="切换摄像头"
             app:layout_constraintRight_toRightOf="parent" />
+
+        <Button
+            android:id="@+id/btn_clock"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="倒计时"
+            app:layout_constraintLeft_toRightOf="@id/tl_btn_beauty"
+            app:layout_constraintTop_toBottomOf="@id/btn_switch_camera" />
 
         <TextView
             android:id="@+id/tv_desc"

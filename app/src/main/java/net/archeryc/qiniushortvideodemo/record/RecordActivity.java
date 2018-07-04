@@ -1,6 +1,7 @@
 package net.archeryc.qiniushortvideodemo.record;
 
 import android.opengl.GLSurfaceView;
+import android.os.CountDownTimer;
 import android.os.Environment;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -45,6 +46,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     private ConstraintLayout clSetting;
     private ToggleButton tbtnRecord;
     private ToggleButton tbtnFlash;
+    private ToggleButton tlBtnBeauty;
     private Button btnSwitchCamera;
     private TextView tvDesc;
     private SectionProgressBar sectionProgressBar;
@@ -53,10 +55,12 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     private Button btnSpeedSlow;
     private Button btnSpeedNormal;
     private Button btnSpeedFast;
+    private Button btnClock;
 
     private GLSurfaceView glSurfaceView;
     private PLShortVideoRecorder mRecorder = new PLShortVideoRecorder();
     private float mCurrentSpeed = 1.0f;
+    PLFaceBeautySetting faceBeautySetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +79,8 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
         btnSpeedSlow = findViewById(R.id.btn_speed_slow);
         btnSpeedNormal = findViewById(R.id.btn_speed_normal);
         btnSpeedFast = findViewById(R.id.btn_speed_fast);
-
+        tlBtnBeauty = findViewById(R.id.tl_btn_beauty);
+        btnClock = findViewById(R.id.btn_clock);
         initView();
 
         initParams();
@@ -132,7 +137,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
         audioEncodeSetting.setHWCodecEnabled(true);
 
         // 美颜选项
-        PLFaceBeautySetting faceBeautySetting = new PLFaceBeautySetting(1.0f, 0.5f, 0.5f);
+        faceBeautySetting = new PLFaceBeautySetting(0.5f, 0.5f, 0.5f);
         faceBeautySetting.setEnable(false);
 
         PLRecordSetting recordSetting = new PLRecordSetting();
@@ -170,6 +175,18 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
                 } else {
                     mRecorder.setFlashEnabled(false);
                 }
+            }
+        });
+
+        tlBtnBeauty.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    faceBeautySetting.setEnable(true);
+                }else{
+                    faceBeautySetting.setEnable(false);
+                }
+                mRecorder.updateFaceBeautySetting(faceBeautySetting);
             }
         });
         btnSwitchCamera.setOnClickListener(new View.OnClickListener() {
@@ -219,6 +236,24 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
             @Override
             public void onClick(View v) {
                 setSpeed(2.0f);
+            }
+        });
+
+        btnClock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CountDownTimer timer=new CountDownTimer(3*1000,1000) {
+                    @Override
+                    public void onTick(long millisUntilFinished) {
+                        Toast.makeText(RecordActivity.this, millisUntilFinished/1000+"秒", Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+                }.start();
+                Toast.makeText(RecordActivity.this,"3秒", Toast.LENGTH_SHORT).show();
             }
         });
     }

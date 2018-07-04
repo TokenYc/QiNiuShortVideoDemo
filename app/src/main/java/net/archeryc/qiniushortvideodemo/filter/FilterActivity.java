@@ -51,6 +51,7 @@ public class FilterActivity extends AppCompatActivity implements View.OnTouchLis
     private final static int MAX_TIME = 15 * 1000;
 
 
+
     private TextView tvFilter;
     private RecyclerView recyclerView;
 
