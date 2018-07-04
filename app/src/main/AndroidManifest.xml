@@ -32,7 +32,8 @@
             android:value="2.3" />
 
         <activity android:name=".ui.progress.ProgressBarActivity" />
-        <activity android:name=".ui.focus.FocusActivity"></activity>
+        <activity android:name=".ui.focus.FocusActivity" />
+        <activity android:name=".filter.FilterActivity"></activity>
     </application>
 
 </manifest>

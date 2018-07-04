@@ -28,4 +28,11 @@
         android:text="对焦测试"
         android:onClick="focus"
         />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="滤镜测试"
+        android:onClick="filter"
+        />
 </LinearLayout>

@@ -17,7 +17,7 @@ import android.widget.Toast;
  * @date on 2018/6/28  下午4:27
  * @mail 247067345@qq.com
  */
-public class FocusView extends AppCompatImageView implements View.OnTouchListener, Animator.AnimatorListener {
+public class FocusView extends AppCompatImageView implements  Animator.AnimatorListener {
 
     private GestureDetector mDetector;
     private AnimatorSet mAnimatorSet;
@@ -60,24 +60,21 @@ public class FocusView extends AppCompatImageView implements View.OnTouchListene
                 }
                 return super.onSingleTapUp(e);
             }
+
         });
     }
 
-    public void attach(View view, OnFocusListener onFocusListener) {
+    public void attach(OnFocusListener onFocusListener) {
         this.mOnFocusListener = onFocusListener;
-        view.setOnTouchListener(this);
     }
 
     public boolean isFocusing() {
         return mAnimatorSet.isRunning();
     }
 
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
+    public void handleEvent(MotionEvent event){
         mDetector.onTouchEvent(event);
-        return true;
     }
-
     @Override
     public void onAnimationStart(Animator animation) {
         setVisibility(VISIBLE);

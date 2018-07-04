@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -83,15 +84,22 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     }
 
     private void initView() {
-        FocusView focusView = new FocusView(this);
+        final FocusView focusView = new FocusView(this);
         focusView.setImageResource(R.mipmap.icon_focus_video);
         clRoot.addView(focusView);
-        focusView.attach(glSurfaceView, new FocusView.OnFocusListener() {
+        focusView.attach(new FocusView.OnFocusListener() {
             @Override
             public void onFocus(int centerX, int centerY, int width, int height) {
                 if (mRecorder != null) {
                     mRecorder.manualFocus(width, height, centerX, centerY);
                 }
+            }
+        });
+        glSurfaceView.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                focusView.handleEvent(event);
+                return true;
             }
         });
     }
