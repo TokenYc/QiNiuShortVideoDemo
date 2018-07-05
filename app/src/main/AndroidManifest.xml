@@ -33,7 +33,8 @@
 
         <activity android:name=".ui.progress.ProgressBarActivity" />
         <activity android:name=".ui.focus.FocusActivity" />
-        <activity android:name=".filter.FilterActivity"></activity>
+        <activity android:name=".filter.FilterActivity" />
+        <activity android:name=".ui.switchwheel.SwitchWheelActivity"></activity>
     </application>
 
 </manifest>

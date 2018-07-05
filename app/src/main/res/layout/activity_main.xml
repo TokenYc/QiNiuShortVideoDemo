@@ -35,4 +35,11 @@
         android:text="滤镜测试"
         android:onClick="filter"
         />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="横向选择控件测试"
+        android:onClick="wheel"
+        />
 </LinearLayout>
