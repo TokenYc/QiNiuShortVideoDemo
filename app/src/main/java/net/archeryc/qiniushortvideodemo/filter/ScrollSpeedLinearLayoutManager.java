@@ -13,17 +13,17 @@ import android.util.DisplayMetrics;
  * @mail 247067345@qq.com
  */
 public class ScrollSpeedLinearLayoutManager extends LinearLayoutManager {
-    private float MILLISECONDS_PER_INCH = 0.03f;
-    private Context contxt;
+    private static float MILLISECONDS_PER_INCH = 0.03f;
+    private Context mContext;
 
     public ScrollSpeedLinearLayoutManager(Context context) {
         super(context);
-        this.contxt = context;
+        this.mContext = context;
     }
 
     public ScrollSpeedLinearLayoutManager(Context context, int orientation, boolean reverseLayout) {
         super(context, orientation, reverseLayout);
-        this.contxt = context;
+        this.mContext = context;
     }
 
     @Override
@@ -50,15 +50,20 @@ public class ScrollSpeedLinearLayoutManager extends LinearLayoutManager {
         startSmoothScroll(linearSmoothScroller);
     }
 
+    /**
+     * 设置速度 默认慢速为 0.5f  0.03f为快速
+     * @param speedFactor 速度因子
+     */
+    public void setSpeed(float speedFactor) {
+        MILLISECONDS_PER_INCH = mContext.getResources().getDisplayMetrics().density * speedFactor;
+    }
 
     public void setSpeedSlow() {
-        //自己在这里用density去乘，希望不同分辨率设备上滑动速度相同
-        //0.3f是自己估摸的一个值，可以根据不同需求自己修改
-        MILLISECONDS_PER_INCH = contxt.getResources().getDisplayMetrics().density * 0.5f;
+        MILLISECONDS_PER_INCH = mContext.getResources().getDisplayMetrics().density * 0.5f;
     }
 
     public void setSpeedFast() {
-        MILLISECONDS_PER_INCH = contxt.getResources().getDisplayMetrics().density * 0.03f;
+        MILLISECONDS_PER_INCH = mContext.getResources().getDisplayMetrics().density * 0.03f;
     }
 }
 

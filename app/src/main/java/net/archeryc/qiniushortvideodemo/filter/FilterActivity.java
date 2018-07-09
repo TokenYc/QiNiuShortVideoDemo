@@ -53,7 +53,7 @@ public class FilterActivity extends AppCompatActivity implements View.OnTouchLis
 
 
     private TextView tvFilter;
-    private RecyclerView recyclerView;
+    private SingleWrapContentRecyclerView recyclerView;
 
     private PLShortVideoRecorder mRecorder = new PLShortVideoRecorder();
 
