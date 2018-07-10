@@ -27,6 +27,7 @@ import com.qiniu.pili.droid.shortvideo.PLVideoEncodeSetting;
 import com.qiniu.pili.droid.shortvideo.PLVideoSaveListener;
 
 import net.archeryc.qiniushortvideodemo.R;
+import net.archeryc.qiniushortvideodemo.bright.BrightnessDetector;
 import net.archeryc.qiniushortvideodemo.ui.focus.FocusView;
 import net.archeryc.qiniushortvideodemo.ui.progress.SectionProgressBar;
 
@@ -61,6 +62,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     private PLShortVideoRecorder mRecorder = new PLShortVideoRecorder();
     private float mCurrentSpeed = 1.0f;
     PLFaceBeautySetting faceBeautySetting;
+    private BrightnessDetector brightnessDetector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +91,8 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     }
 
     private void initView() {
+        brightnessDetector = new BrightnessDetector(this);
+
         final FocusView focusView = new FocusView(this);
         focusView.setImageResource(R.mipmap.icon_focus_video);
         clRoot.addView(focusView);
@@ -104,6 +108,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 focusView.handleEvent(event);
+                brightnessDetector.handleEvent(event);
                 return true;
             }
         });
@@ -149,7 +154,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
         mRecorder.prepare(glSurfaceView, cameraSetting, microphoneSetting, videoEncodeSetting, audioEncodeSetting,
                 faceBeautySetting, recordSetting);
 //        mRecorder.setRecordSpeed(2);
-
+//        mRecorder.setBuiltinFilter(mRecorder.getBuiltinFilterList()[2].getName());
     }
 
     private void initListener() {
@@ -181,9 +186,9 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
         tlBtnBeauty.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     faceBeautySetting.setEnable(true);
-                }else{
+                } else {
                     faceBeautySetting.setEnable(false);
                 }
                 mRecorder.updateFaceBeautySetting(faceBeautySetting);
@@ -242,10 +247,10 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
         btnClock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CountDownTimer timer=new CountDownTimer(3*1000,1000) {
+                CountDownTimer timer = new CountDownTimer(3 * 1000, 1000) {
                     @Override
                     public void onTick(long millisUntilFinished) {
-                        Toast.makeText(RecordActivity.this, millisUntilFinished/1000+"秒", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(RecordActivity.this, millisUntilFinished / 1000 + "秒", Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -253,7 +258,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
 
                     }
                 }.start();
-                Toast.makeText(RecordActivity.this,"3秒", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RecordActivity.this, "3秒", Toast.LENGTH_SHORT).show();
             }
         });
     }
