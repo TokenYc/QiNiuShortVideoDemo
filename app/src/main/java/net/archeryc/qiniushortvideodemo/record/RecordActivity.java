@@ -63,6 +63,8 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     private float mCurrentSpeed = 1.0f;
     PLFaceBeautySetting faceBeautySetting;
     private BrightnessDetector brightnessDetector;
+    private int mExposureCompensation = 0;
+    private int mStartExposureCompensation = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,15 +85,17 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
         btnSpeedFast = findViewById(R.id.btn_speed_fast);
         tlBtnBeauty = findViewById(R.id.tl_btn_beauty);
         btnClock = findViewById(R.id.btn_clock);
-        initView();
 
         initParams();
+
+        initView();
+
 
         initListener();
     }
 
     private void initView() {
-        brightnessDetector = new BrightnessDetector(this);
+
 
         final FocusView focusView = new FocusView(this);
         focusView.setImageResource(R.mipmap.icon_focus_video);
@@ -315,6 +319,14 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     public void onReady() {
         Log.d(Tag, "-----onReady-----");
         tbtnRecord.setVisibility(View.VISIBLE);
+        brightnessDetector = new BrightnessDetector(this, mRecorder.getMinExposureCompensation(),
+                mRecorder.getMaxExposureCompensation());
+        brightnessDetector.setOnBrightnessChangedListener(new BrightnessDetector.OnBrightnessChangedListener() {
+            @Override
+            public void onBrightnessChanged(int exposureCompensation) {
+                mRecorder.setExposureCompensation(exposureCompensation);
+            }
+        });
     }
 
     @Override
