@@ -10,11 +10,12 @@ import android.graphics.PorterDuff;
 import android.graphics.PorterDuffXfermode;
 import android.graphics.RectF;
 import android.graphics.Xfermode;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.AnimationSet;
 
 import net.archeryc.qiniushortvideodemo.ui.DensityUtil;
 
@@ -47,11 +48,24 @@ public class RecordButton extends View {
 
     private RectF mRectF = new RectF();
 
-    private RecordMode mRecordMode;
+    private RecordMode mRecordMode = RecordMode.ORIGIN;
 
-    private AnimatorSet mAnimatorSet;
+    private AnimatorSet mBeginAnimatorSet = new AnimatorSet();
+
+    private AnimatorSet mEndAnimatorSet = new AnimatorSet();
 
     private Xfermode mXfermode = new PorterDuffXfermode(PorterDuff.Mode.DST_OUT);
+
+    private Handler mHandler = new Handler();
+
+    private ClickRunnable mClickRunnable = new ClickRunnable();
+
+    private OnRecordStateChangedListener mOnRecordStateChangedListener;
+
+    private float mInitX;
+
+    private float mInitY;
+
 
     public RecordButton(Context context) {
         this(context, null);
@@ -130,11 +144,38 @@ public class RecordButton extends View {
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                startAnimation();
+                if (mRecordMode == RecordMode.ORIGIN && inBeginRange(event)) {
+                    startBeginAnimation();
+                    mOnRecordStateChangedListener.onStart();
+                    mHandler.postDelayed(mClickRunnable, 400);
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (mRecordMode == RecordMode.LONG_CLICK) {
+                    setX(event.getRawX() - getMeasuredWidth() / 2);
+                    setY(event.getRawY() - getMeasuredHeight() / 2);
+                    if (getY() < mInitY) {
+                        mOnRecordStateChangedListener.onZoom((mInitY - getY()) / mInitY);
+                    }
+                }
                 break;
             case MotionEvent.ACTION_UP:
+                if (mRecordMode == RecordMode.LONG_CLICK) {
+                    mOnRecordStateChangedListener.onStop();
+                    mRecordMode = RecordMode.ORIGIN;
+                    mBeginAnimatorSet.cancel();
+                    startEndAnimation();
+                    setX(mInitX);
+                    setY(mInitY);
+                } else if (mRecordMode == RecordMode.ORIGIN && inBeginRange(event)) {
+                    mHandler.removeCallbacks(mClickRunnable);
+                    mRecordMode = RecordMode.SINGLE_CLICK;
+                } else if (mRecordMode == RecordMode.SINGLE_CLICK && inEndRange(event)) {
+                    mOnRecordStateChangedListener.onStop();
+                    mRecordMode = RecordMode.ORIGIN;
+                    mBeginAnimatorSet.cancel();
+                    startEndAnimation();
+                }
                 break;
             default:
                 break;
@@ -142,8 +183,29 @@ public class RecordButton extends View {
         return true;
     }
 
-    private void startAnimation() {
-        mAnimatorSet = new AnimatorSet();
+    private boolean inBeginRange(MotionEvent event) {
+        int centerX = getMeasuredWidth() / 2;
+        int centerY = getMeasuredHeight() / 2;
+        int minX = (int) (centerX - mMinCircleRadius);
+        int maxX = (int) (centerX + mMinCircleRadius);
+        int minY = (int) (centerY - mMinCircleRadius);
+        int maxY = (int) (centerY + mMinCircleRadius);
+        boolean isXInRange = event.getX() >= minX && event.getX() <= maxX;
+        boolean isYInRange = event.getY() >= minY && event.getY() <= maxY;
+        return isXInRange && isYInRange;
+    }
+
+    private boolean inEndRange(MotionEvent event) {
+        int minX = 0;
+        int maxX = getMeasuredWidth();
+        int minY = 0;
+        int maxY = getMeasuredHeight();
+        boolean isXInRange = event.getX() >= minX && event.getX() <= maxX;
+        boolean isYInRange = event.getY() >= minY && event.getY() <= maxY;
+        return isXInRange && isYInRange;
+    }
+
+    private void startBeginAnimation() {
         AnimatorSet startAnimatorSet = new AnimatorSet();
         ObjectAnimator cornerAnimator = ObjectAnimator.ofFloat(this, "corner",
                 mMaxCorner, mMinCorner)
@@ -161,10 +223,27 @@ public class RecordButton extends View {
                 .setDuration(1500);
         circleWidthAnimator.setRepeatCount(ObjectAnimator.INFINITE);
 
-        mAnimatorSet.playSequentially(startAnimatorSet, circleWidthAnimator);
-        mAnimatorSet.start();
+        mBeginAnimatorSet.playSequentially(startAnimatorSet, circleWidthAnimator);
+        mBeginAnimatorSet.start();
     }
 
+    private void startEndAnimation() {
+        ObjectAnimator cornerAnimator = ObjectAnimator.ofFloat(this, "corner",
+                mMinCorner, mMaxCorner)
+                .setDuration(500);
+        ObjectAnimator rectSizeAnimator = ObjectAnimator.ofFloat(this, "rectWidth",
+                mMinRectWidth, mMaxRectWidth)
+                .setDuration(500);
+        ObjectAnimator radiusAnimator = ObjectAnimator.ofFloat(this, "circleRadius",
+                mMaxCircleRadius, mMinCircleRadius)
+                .setDuration(500);
+        ObjectAnimator circleWidthAnimator = ObjectAnimator.ofFloat(this, "circleStrokeWidth",
+                mMaxCircleStrokeWidth, mMinCircleStrokeWidth)
+                .setDuration(500);
+
+        mEndAnimatorSet.playTogether(cornerAnimator, rectSizeAnimator, radiusAnimator, circleWidthAnimator);
+        mEndAnimatorSet.start();
+    }
 
     public void setCorner(float corner) {
         this.corner = corner;
@@ -184,6 +263,40 @@ public class RecordButton extends View {
         this.rectWidth = rectWidth;
     }
 
+    class ClickRunnable implements Runnable {
+
+        @Override
+        public void run() {
+            mRecordMode = RecordMode.LONG_CLICK;
+            mInitX = getX();
+            mInitY = getY();
+        }
+    }
+
+    public void setOnRecordStateChangedListener(OnRecordStateChangedListener listener) {
+        this.mOnRecordStateChangedListener = listener;
+    }
+
+    public interface OnRecordStateChangedListener {
+
+        /**
+         * 开始录制
+         */
+        void onStart();
+
+        /**
+         * 结束录制
+         */
+        void onStop();
+
+        /**
+         * 缩放百分比
+         *
+         * @param percentage 百分比值 0%~100% 对应缩放支持的最小和最大值 默认最小1.0
+         */
+        void onZoom(float percentage);
+    }
+
     private enum RecordMode {
         /**
          * 单击录制模式
@@ -192,7 +305,11 @@ public class RecordButton extends View {
         /**
          * 长按录制模式
          */
-        LONG_CLICK;
+        LONG_CLICK,
+        /**
+         * 初始化
+         */
+        ORIGIN;
 
         RecordMode() {
 

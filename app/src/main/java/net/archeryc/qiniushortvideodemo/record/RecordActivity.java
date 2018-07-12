@@ -32,6 +32,7 @@ import net.archeryc.qiniushortvideodemo.ui.focus.FocusView;
 import net.archeryc.qiniushortvideodemo.ui.progress.SectionProgressBar;
 
 import java.io.File;
+import java.util.List;
 
 public class RecordActivity extends AppCompatActivity implements PLRecordStateListener {
 
@@ -318,6 +319,10 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     @Override
     public void onReady() {
         Log.d(Tag, "-----onReady-----");
+        List<Float> zooms = mRecorder.getZooms();
+        for (Float zoom : zooms) {
+            Log.d(Tag, "zoom--->" + zoom);
+        }
         tbtnRecord.setVisibility(View.VISIBLE);
         brightnessDetector = new BrightnessDetector(this, mRecorder.getMinExposureCompensation(),
                 mRecorder.getMaxExposureCompensation());
