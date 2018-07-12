@@ -14,6 +14,7 @@ import net.archeryc.qiniushortvideodemo.filter.FilterActivity;
 import net.archeryc.qiniushortvideodemo.record.RecordActivity;
 import net.archeryc.qiniushortvideodemo.ui.focus.FocusActivity;
 import net.archeryc.qiniushortvideodemo.ui.progress.ProgressBarActivity;
+import net.archeryc.qiniushortvideodemo.ui.recordbutton.RecordButtonActivity;
 import net.archeryc.qiniushortvideodemo.ui.switchwheel.SwitchWheelActivity;
 
 import java.util.List;
@@ -62,5 +63,9 @@ public class MainActivity extends AppCompatActivity {
 
     public void wheel(View view) {
         startActivity(new Intent(this, SwitchWheelActivity.class));
+    }
+
+    public void recordButton(View view) {
+        startActivity(new Intent(this, RecordButtonActivity.class));
     }
 }
