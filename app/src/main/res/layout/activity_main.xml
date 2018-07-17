@@ -49,4 +49,11 @@
         android:text="录制按钮"
         android:onClick="recordButton"
         />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="选择封面"
+        android:onClick="selectCover"
+        />
 </LinearLayout>

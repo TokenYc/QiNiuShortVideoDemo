@@ -35,7 +35,8 @@
         <activity android:name=".ui.focus.FocusActivity" />
         <activity android:name=".filter.FilterActivity" />
         <activity android:name=".ui.switchwheel.SwitchWheelActivity" />
-        <activity android:name=".ui.recordbutton.RecordButtonActivity"></activity>
+        <activity android:name=".ui.recordbutton.RecordButtonActivity" />
+        <activity android:name=".ui.cover.CoverActivity"></activity>
     </application>
 
 </manifest>

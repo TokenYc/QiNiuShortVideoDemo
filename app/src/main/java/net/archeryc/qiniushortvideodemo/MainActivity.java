@@ -12,6 +12,7 @@ import com.yanzhenjie.permission.Permission;
 
 import net.archeryc.qiniushortvideodemo.filter.FilterActivity;
 import net.archeryc.qiniushortvideodemo.record.RecordActivity;
+import net.archeryc.qiniushortvideodemo.ui.cover.CoverActivity;
 import net.archeryc.qiniushortvideodemo.ui.focus.FocusActivity;
 import net.archeryc.qiniushortvideodemo.ui.progress.ProgressBarActivity;
 import net.archeryc.qiniushortvideodemo.ui.recordbutton.RecordButtonActivity;
@@ -67,5 +68,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void recordButton(View view) {
         startActivity(new Intent(this, RecordButtonActivity.class));
+    }
+
+
+    public void selectCover(View view) {
+        startActivity(new Intent(this, CoverActivity.class));
     }
 }

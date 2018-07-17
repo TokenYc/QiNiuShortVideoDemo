@@ -1,5 +1,6 @@
 package net.archeryc.qiniushortvideodemo.record;
 
+import android.app.Dialog;
 import android.opengl.GLSurfaceView;
 import android.os.CountDownTimer;
 import android.os.Environment;
@@ -43,7 +44,7 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
     private final static String TEST_PATH = Environment.getExternalStorageDirectory() +
             File.separator + "qiniu_demo" + File.separator + "test.mp4";
 
-    private final static int MAX_TIME = 15 * 1000;
+    private final static int MAX_TIME = 6 * 1000;
     private ConstraintLayout clRoot;
     private ConstraintLayout clSetting;
     private ToggleButton tbtnRecord;
@@ -252,18 +253,20 @@ public class RecordActivity extends AppCompatActivity implements PLRecordStateLi
         btnClock.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CountDownTimer timer = new CountDownTimer(3 * 1000, 1000) {
-                    @Override
-                    public void onTick(long millisUntilFinished) {
-                        Toast.makeText(RecordActivity.this, millisUntilFinished / 1000 + "秒", Toast.LENGTH_SHORT).show();
-                    }
-
-                    @Override
-                    public void onFinish() {
-
-                    }
-                }.start();
-                Toast.makeText(RecordActivity.this, "3秒", Toast.LENGTH_SHORT).show();
+//                CountDownTimer timer = new CountDownTimer(3 * 1000, 1000) {
+//                    @Override
+//                    public void onTick(long millisUntilFinished) {
+//                        Toast.makeText(RecordActivity.this, millisUntilFinished / 1000 + "秒", Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                    @Override
+//                    public void onFinish() {
+//
+//                    }
+//                }.start();
+//                Toast.makeText(RecordActivity.this, "3秒", Toast.LENGTH_SHORT).show();
+                Dialog dialog = new Dialog(RecordActivity.this);
+                dialog.show();
             }
         });
     }
